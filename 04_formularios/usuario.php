@@ -18,15 +18,25 @@
 <body>
     <div class="container">
         <!-- Content here -->
+        <?php
+        function depurar($entrada){
+            $salida = htmlspecialchars($entrada);
+            $salida = trim($salida);
+            $salida = stripcslashes($salida);
+            $salida = preg_replace('!\s+!', ' ', $salida);
+            return $salida;
+        }
+        ?>
 
         <?php
         if($_SERVER["REQUEST_METHOD"] == "POST") {
-            $tmp_usuario = $_POST["usuario"];
-            $tmp_nombre = $_POST["nombre"];
-            $tmp_apellidos = $_POST["apellidos"];
-            $tmp_dni = $_POST["dni"];
-            $tmp_correo = $_POST["correo"];
-            $tmp_fecha_nacimiento = $_POST["fecha_nacimiento"];
+            $tmp_usuario = depurar($_POST["usuario"]);
+            $tmp_nombre = depurar($_POST["nombre"]);
+            $tmp_nombre = depurar($_POST["nombre"]);
+            $tmp_apellidos = depurar($_POST["apellidos"]);
+            $tmp_dni = depurar($_POST["dni"]);
+            $tmp_correo = depurar($_POST["correo"]);
+            $tmp_fecha_nacimiento = depurar($_POST["fecha_nacimiento"]);
 
             
 
@@ -105,7 +115,6 @@
                     }
                 }
             }
-
             if($tmp_usuario == '') {
                 $err_usuario = "El usuario es obligatorio";
             } else {
@@ -118,7 +127,6 @@
                     $usuario = $tmp_usuario;
                 }
             }
-
             if($tmp_nombre == '') {
                 $err_nombre = "El nombre es obligatorio";
             } else {
@@ -131,7 +139,7 @@
                         $err_nombre = "El nombre solo puede contener letras y espacios
                             en blanco";
                     } else {
-                        $nombre = $tmp_nombre;
+                        $nombre = ucwords(strtolower($tmp_nombre));
                     }
                 }
             }
@@ -181,7 +189,6 @@
                 }
             }
         }
-    }
     ?>
 
         <h1>Formulario usuario</h1>

@@ -27,7 +27,7 @@
         if($tmp_precio == '') {
             $err_precio = "El precio es obligatorio";
         } else {
-            if(filter_var($tmp_precio, FILTER_VALIDATE_FLOAT) === FALSE) {
+           /* if(filter_var($tmp_precio, FILTER_VALIDATE_FLOAT) === FALSE) {
                 $err_precio = "El precio debe ser un número";
             } else {
                 if($tmp_precio < 0) {
@@ -35,7 +35,7 @@
                 } else {
                     $precio = $tmp_precio;
                 }
-            }
+            }*/
         }
 
         if($tmp_iva == '') {
