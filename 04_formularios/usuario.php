@@ -136,40 +136,53 @@
                 }
             }
         }
-        if ($tmp_fecha_nacimiento == '') {
+        if($tmp_fecha_nacimiento == '') {
             $err_fecha_nacimiento = "La fecha de nacimiento es obligatoria";
-
         } else {
-            //  letras de la A a la Z (mayus o minus), numeros y barrabaja (4-12 chars)
             $patron = "/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/";
             if(!preg_match($patron, $tmp_fecha_nacimiento)) {
-                $err_fecha_nacimiento = "El usuario debe contener de 4 a 12 letras, 
-                    números o barrabaja";
-             } else {
-                    $fecha_actual = date("Y-m-d");
-                    list($anio_actual,$mes_actua,$dia_actual) = explode('-',$fecha_actual);
-                    list($anio,$mes,$dia) = explode('-',$tmp_fecha_nacimiento);
+                $err_fecha_nacimiento = "Formato de fecha incorrecto";
+            } else {
+                $fecha_actual = date("Y-m-d");
+                list($anno_actual,$mes_actual,$dia_actual) = explode('-',$fecha_actual);
+                list($anno,$mes,$dia) = explode('-',$tmp_fecha_nacimiento);
 
-                    if ($anio_actual - $anio <18) {
+                //echo "<h2>Año: $anno, Año actual: $anno_actual</h2>";
+                if($anno_actual - $anno < 18) {
+                    $err_fecha_nacimiento = "No puedes ser menor de edad";
+                } elseif($anno_actual - $anno == 18) {
+                    if($mes_actual - $mes < 0) {
                         $err_fecha_nacimiento = "No puedes ser menor de edad";
-                    } elseif ($anio_actual - $anio == 0){
-                        if ($mes_actual - $mes < 0) {
-                           echo "<p>Es menor de edad</p>";
-                        } elseif ($mes_actual - $mes == 0) {
-                            if ($dia_actual - $dia == 0) {
-                                //entra
-                            } elseif ($dia_actual - $dia < 0) {
-                                // menor de edad
-                            }
-                        } elseif ($mes_actual - $mes > 0) {
-                            //es mayor de edad
+                    } elseif($mes_actual - $mes == 0) {
+                        if($dia_actual - $dia < 0) {
+                            $err_fecha_nacimiento = "No puedes ser menor de edad";
+                        } else {
+                            $fecha_nacimiento = $tmp_fecha_nacimiento;
                         }
-                    }
+                    } elseif($mes_actual - $mes > 0) {
+                        $fecha_nacimiento = $tmp_fecha_nacimiento;
+                    } 
+                } elseif($anno_actual - $anno > 121) {
+                    $err_fecha_nacimiento = "No puedes tener más de 120 años";
+                } elseif($anno_actual - $anno == 121) {
+                    if($mes_actual - $mes > 0) {
+                        $err_fecha_nacimiento = "No puedes tener más de 120 años";
+                    } elseif($mes_actual - $mes == 0) {
+                        if($dia_actual - $dia >= 0) {
+                            $err_fecha_nacimiento = "No puedes tener más de 120 años";
+                        } else {
+                            $fecha_nacimiento = $tmp_fecha_nacimiento;
+                        }
+                    } elseif($mes_actual - $mes < 0) {
+                        $fecha_nacimiento = $tmp_fecha_nacimiento;
+                    } 
+                } else {
+                    $fecha_nacimiento = $tmp_fecha_nacimiento;
+                }
             }
+        }
     }
-        //******************************************** */    
-         
-        ?>
+    ?>
 
         <h1>Formulario usuario</h1>
 
@@ -212,6 +225,7 @@
             <h1><?php echo $correo ?></h1>
             <h1><?php echo $usuario ?></h1>
             <h1><?php echo $nombre ?></h1>
+            <h1><?php echo $fecha_nacimiento ?></h1>
         <?php } ?>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
