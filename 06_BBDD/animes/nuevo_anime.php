@@ -8,7 +8,7 @@
     <?php 
         error_reporting( E_ALL );
         ini_set("display_errors", 1 ); 
-        
+
         require 'conexion.php'; 
     ?>
 </head>
@@ -21,21 +21,48 @@
             $nombre_estudio = $_POST["nombre_estudio"];
             $anno_estreno = $_POST["anno_estreno"];
             $num_temporadas = $_POST["num_temporadas"];
+            /**
+             * $_FILES -> que es un array BIDIMENSIONAL
+             */
+            //var_dump($_FILES["imagen"]);
+            $nombre_imagen = $_FILES["imagen"]["name"];
+            $ubicacion_temporal = $_FILES["imagen"]["tmp_name"];
+            $ubicacion_final = "./imagenes/$nombre_imagen";
 
-            $sql = "INSERT INTO animes (titulo, nombre_estudio, anno_estreno, num_temporadas) 
-                VALUES ('$titulo', '$nombre_estudio', $anno_estreno, $num_temporadas)";
+            move_uploaded_file($ubicacion_temporal,$ubicacion_final);
+
+            $sql = "INSERT INTO animes (titulo, nombre_estudio, anno_estreno, num_temporadas, imagen) 
+                VALUES ('$titulo', '$nombre_estudio', $anno_estreno, $num_temporadas,'$ubicacion_final')";
 
             $_conexion -> query($sql);
         }
+        
+        $sql = "SELECT * FROM estudios ORDER BY nombre_estudio";
+        $resultado = $_conexion -> query($sql);
+        $estudios = [];
+
+        while ($fila = $resultado -> fetch_assoc()) {
+            array_push($estudios, $fila["nombre_estudio"]);
+        }
+
+
         ?>
-        <form class="col-6" action="" method="post">
+        <form class="col-6" action="" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">Título</label>
                 <input class="form-control" type="text" name="titulo">
             </div>
             <div class="mb-3">
                 <label class="form-label">Nombre estudio</label>
-                <input class="form-control" type="text" name="nombre_estudio">
+                <select class="form-select" name="nombre_estudio">
+                    <option value="" selected disabled hidden>---Elige un estudio---</option>
+                    <?php
+                    foreach ($estudios as $estudio) { ?>
+                        <option value="<?php echo $estudio ?>" >
+                            <?php echo $estudio ?>
+                        </option>
+                    <?php } ?>
+                </select>
             </div>
             <div class="mb-3">
                 <label class="form-label">Año estreno</label>
@@ -46,7 +73,12 @@
                 <input class="form-control" type="text" name="num_temporadas">
             </div>
             <div class="mb-3">
+                <label class="form-label">Imagen</label>
+                <input class="form-control" type="file" name="imagen">
+            </div>
+            <div class="mb-3">
                 <input class="btn btn-primary" type="submit" value="Insertar">
+                <a class="btn btn-secondary" href="index.php">Volver</a>
             </div>
         </form>
     </div>
