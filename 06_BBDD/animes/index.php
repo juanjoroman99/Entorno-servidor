@@ -69,7 +69,7 @@
                     </td>
                     <td>
                         <a class="btn btn-primary"
-                            href="ver_anime.php?id_anime=<?php echo $fila["id_anime"] ?>">
+                            href="editar_anime.php?id_anime=<?php echo $fila["id_anime"] ?>">
                             Editar
                         </a>
                     </td>
