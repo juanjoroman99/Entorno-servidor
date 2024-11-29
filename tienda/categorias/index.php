@@ -28,19 +28,24 @@
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $categoria = $_POST["categoria"];
             echo "<h1>$categoria</h1>";
-            # borrar el anime
-            $sql = "DELETE FROM categorias WHERE categoria = $categoria";
+            # borrar la categoria
+            $sql = "DELETE FROM categorias WHERE categoria = '$categoria'";
             $_conexion -> query($sql);
+        }
+
+        if (isset($categoria)) {
+            $sql = "SELECT COUNT(*) as count FROM productos WHERE categoria = '$categoria'";
+            $resultado = $_conexion -> query($sql);
+            $fila = $resultado -> fetch_assoc();
+
+            if ($fila['count'] > 0) {
+                $err_categoria = "No puedes borrar una categoria que este asociada a un producto";
+            } 
         }
 
         $sql = "SELECT * FROM categorias";
         $resultado = $_conexion -> query($sql);
-        /**
-         * Aplicamos la funcion query a la conexion donde se ejecuta la sentencia sql hecha
-         * 
-         * El resultado se almacena $resultado, que es un objetocon una estructura parecida
-         * a los arrays
-         */
+        
     ?>
     <a class="btn btn-secondary" href="nueva_categoria.php">Crear nueva categoria</a><br><br>
     <table class="table table-striped table-hover">
@@ -70,8 +75,7 @@
                             <input type="hidden" name="categoria" value="<?php echo $fila["categoria"] ?>">
                             <input class="btn btn-danger" type="submit" value="borrar">
                         </form>
-                    </td>
-                    <?php
+                    </td> <?php if (isset($err_categoria)) echo "<span class='error'>$err_categoria</span>";
                     echo "</tr>";
                 }  
             ?>

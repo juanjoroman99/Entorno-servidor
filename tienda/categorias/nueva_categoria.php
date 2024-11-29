@@ -11,13 +11,13 @@
 
         require '../util/conexion.php';
 
-        session_start();
+       /* session_start();
         if (isset($_SESSION["usuario"])) {
             echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
         } else {
             header("location: ../usuario/iniciar_sesion.php");
             exit;
-        }
+        }*/
     ?>
 </head>
 <body>
@@ -30,6 +30,8 @@
 
           /* $categoria = $tmp_categoria;
            $descripcion = $tmp_descripcion;*/
+
+           //validacion de categoria
            if ($tmp_categoria == '') {
             $err_categoria = "La categoria es obligatoria";
            } else {
@@ -44,20 +46,40 @@
                     }
                 }
             }
+
+            //validacion de descripcion
             if ($tmp_descripcion == '') {
-                $err_descripcion = "La descripcion es obligatoria";
+                $descripcion = $tmp_descripcion;
             } else {
                 }if (strlen($tmp_descripcion) > 255) {
-                $err_descripcion = "La descripcion tiene que tener un máximo de 255 caracteres";
+                    $err_descripcion = "La descripcion tiene que tener un máximo de 255 caracteres";
                 } else {
-                $descripcion = $tmp_descripcion;
+                    $descripcion = $tmp_descripcion;
             }
         }
 
-        $sql = "INSERT INTO categorias (categoria, descripcion)
-                VALUES ('$categoria', '$descripcion')";
+        if (isset($categoria) and isset($descripcion)) {
+            $sql = "SELECT categoria FROM categorias ORDER BY categoria";
+            $resultado = $_conexion -> query($sql);
+            $categorias = [];
+
+            while ($fila = $resultado -> fetch_assoc()) {
+                array_push($categorias,$fila["categoria"]);
+            }
+
+            for ($i=0; $i < count($categorias); $i++) { 
+                if ($categorias[$i] == $fila) {
+                    $err_categoria = "La categoria ya existe";
+                } else {
+                    $sql = "INSERT INTO categorias (categoria, descripcion)
+                        VALUES ('$categoria', '$descripcion')";
+                    
+                    $_conexion -> query($sql);
+                }
+            }
+        }
         
-        $_conexion -> query($sql);
+        
         ?>
         <form class="col-6" action="" method="post" enctype="multipart/form-data">
             <div class="mb-3">

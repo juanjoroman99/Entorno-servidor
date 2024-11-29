@@ -11,13 +11,13 @@
 
         require ('../util/conexion.php');
 
-        session_start();
+        /*session_start();
         if (isset($_SESSION["usuario"])) {
             echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
         } else {
             header("location: usuario/iniciar_sesion.php");
             exit;
-        }
+        }*/
     ?>
 </head>
 <body>
@@ -38,26 +38,23 @@
 
         echo"<h2>$categoria</h2>";
 
-        $sql = "SELECT * FROM estudios ORDER BY nombre_estudio";
+        $sql = "SELECT * FROM categorias ORDER BY categoria";
         $resultado = $_conexion -> query($sql);
         $estudios = [];
 
         while ($fila = $resultado -> fetch_assoc()) {
-            array_push($estudios, $fila["nombre_estudio"]);
+            array_push($estudios, $fila["categoria"]);
         }
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $titulo = $_POST["titulo"];
-            $nombre_estudio = $_POST["nombre_estudio"];
-            $anno_estreno = $_POST["anno_estreno"];
-            $num_temporadas = $_POST["num_temporadas"];
+            $categoria = $_POST["categoria"];
+            $descripcion = $_POST["descripcion"];
 
-            $sql = "UPDATE animes SET
-                titulo = '$titulo',
-                nombre_estudio = '$nombre_estudio',
-                anno_estreno = '$anno_estreno',
-                num_temporadas = '$num_temporadas'
-                WHERE id_anime = '$id_anime'
+            $sql = "UPDATE categorias SET
+                categoria = '$categoria'
+                descripcion = '$descripcion'
+                WHERE categoria = '$categoria'
+
             ";
             $_conexion -> query($sql);
         }
@@ -65,35 +62,23 @@
         ?>
         <form class="col-6" action="" method="post" enctype="multipart/form-data">
             <div class="mb-3">
-                <label class="form-label">Título</label>
-                <input class="form-control" type="text" name="titulo" value="<?php echo $titulo ?>">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Nombre estudio</label>
-                <select class="form-select" name="nombre_estudio">
-                    <option value="<?php echo $nombre_estudio ?>" selected disabled hidden><?php echo $nombre_estudio ?></option>
+                <label class="form-label">Categoria</label>
+                <select class="form-select" name="categoria">
+                    <option value="<?php echo $categoria ?>" selected disabled hidden><?php echo $categoria ?></option>
                     <?php
-                    foreach ($estudios as $estudio) { ?>
-                        <option value="<?php echo $estudio ?>" >
-                            <?php echo $estudio ?>
+                    foreach ($categorias as $categoria) { ?>
+                        <option value="<?php echo $categoria ?>" >
+                            <?php echo $categoria ?>
                         </option>
                     <?php } ?>
                 </select>
             </div>
             <div class="mb-3">
-                <label class="form-label">Año estreno</label>
+                <label class="form-label">Descripción</label>
                 <input class="form-control" type="text" name="anno_estreno" value="<?php echo $anno_estreno ?>">
             </div>
             <div class="mb-3">
-                <label class="form-label">Número de temporadas</label>
-                <input class="form-control" type="text" name="num_temporadas" value="<?php echo $num_temporadas ?>">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Imagen</label>
-                <input class="form-control" type="file" name="imagen">
-            </div>
-            <div class="mb-3">
-                <input type="hidden" name ="id_anime" value="<?php echo $id_anime ?>">
+                <input type="hidden" name ="categoria" value="<?php echo $categoria ?>">
                 <input class="btn btn-primary" type="submit" value="Confirmar">
                 <a class="btn btn-secondary" href="index.php">Volver</a>
             </div>
