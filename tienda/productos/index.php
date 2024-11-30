@@ -42,7 +42,7 @@
          * a los arrays
          */
     ?>
-    <a class="btn btn-secondary" href="nuevo_anime.php">Crear nueva producto</a><br><br>
+    <a class="btn btn-secondary" href="nuevo_producto.php">Crear nuevo producto</a><br><br>
     <table class="table table-striped table-hover">
         <thead class="table-dark">
             <tr>

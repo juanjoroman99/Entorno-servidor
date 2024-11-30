@@ -15,7 +15,7 @@
         if (isset($_SESSION["usuario"])) {
             echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
         } else {
-            header("location: usuario/iniciar_sesion.php");
+            header("location: ../usuario/iniciar_sesion.php");
             exit;
         }
     ?>
@@ -38,7 +38,7 @@
             $resultado = $_conexion -> query($sql);
             $fila = $resultado -> fetch_assoc();
 
-            if ($fila['count'] > 0) {
+            if ($categoria -> num_rows == 1) {
                 $err_categoria = "No puedes borrar una categoria que este asociada a un producto";
             } 
         }

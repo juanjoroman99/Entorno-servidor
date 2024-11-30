@@ -11,13 +11,13 @@
 
         require ('../util/conexion.php');
 
-        /*session_start();
+        session_start();
         if (isset($_SESSION["usuario"])) {
             echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
         } else {
             header("location: usuario/iniciar_sesion.php");
             exit;
-        }*/
+        }
     ?>
 </head>
 <body>
@@ -27,7 +27,7 @@
         echo "<h2>" . $_GET["categoria"] . "</h2>";
         
         $categoria = $_GET["categoria"];
-        $sql = "SELECT * FROM categorias WHERE categoria = $categoria";
+        $sql = "SELECT * FROM categorias WHERE categoria = '$categoria'";
         $resultado = $_conexion -> query($sql);
 
         
@@ -36,25 +36,13 @@
             $descripcion = $fila["descripcion"];
         }
 
-        echo"<h2>$categoria</h2>";
-
-        $sql = "SELECT * FROM categorias ORDER BY categoria";
-        $resultado = $_conexion -> query($sql);
-        $estudios = [];
-
-        while ($fila = $resultado -> fetch_assoc()) {
-            array_push($estudios, $fila["categoria"]);
-        }
-
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $categoria = $_POST["categoria"];
             $descripcion = $_POST["descripcion"];
 
             $sql = "UPDATE categorias SET
-                categoria = '$categoria'
                 descripcion = '$descripcion'
                 WHERE categoria = '$categoria'
-
             ";
             $_conexion -> query($sql);
         }
@@ -63,19 +51,11 @@
         <form class="col-6" action="" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">Categoria</label>
-                <select class="form-select" name="categoria">
-                    <option value="<?php echo $categoria ?>" selected disabled hidden><?php echo $categoria ?></option>
-                    <?php
-                    foreach ($categorias as $categoria) { ?>
-                        <option value="<?php echo $categoria ?>" >
-                            <?php echo $categoria ?>
-                        </option>
-                    <?php } ?>
-                </select>
+                <input class="form-control" name="categoria" value="<?php echo $categoria ?>" disabled>
             </div>
             <div class="mb-3">
                 <label class="form-label">Descripción</label>
-                <input class="form-control" type="text" name="anno_estreno" value="<?php echo $anno_estreno ?>">
+                <textarea class="form-control" name="descripcion"><?php echo $descripcion ?></textarea>
             </div>
             <div class="mb-3">
                 <input type="hidden" name ="categoria" value="<?php echo $categoria ?>">

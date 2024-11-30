@@ -9,7 +9,7 @@
         error_reporting( E_ALL );
         ini_set("display_errors", 1 ); 
 
-        require ('../conexion.php'); 
+        require ('../util/conexion.php'); 
     ?>
 </head>
 <body>
@@ -22,30 +22,22 @@
 
             $sql ="SELECT * FROM usuarios WHERE usuario = '$usuario'";
             $resultado = $_conexion -> query($sql);
-            //var_dump($resultado);
 
             if ($resultado -> num_rows == 0) {
                 echo "<h2>El usuario $usuario no existe</h2>";
             } else {
-                $datos_usuario = $resultado -> fetch_assoc();
-                /**
-                 * Podemos acceder a:
-                 * 
-                 * $datos_usuario["usuario"]
-                 * $datos_contrasena["contrasena"];
-                 */
+                if (isset($usuario) and isset($contrasena)) {
+                    $datos_usuario = $resultado -> fetch_assoc();
                 $acceso_concedido = password_verify($contrasena,$datos_usuario["contrasena"]);
-                //var_dump($acceso_concedido);
                 if ($acceso_concedido) {
-                    //ole ole
                     echo "ole ole";
                     session_start();
                     $_SESSION["usuario"] = "usuario";
-                    //$_COOKIE["whatever"] = "whatever";
-                    header("location: ../index.php");
+                    header("location: ../categorias/index.php");
                     exit;
                 } else {
                     echo "<h2>La contraseña es incorrecta</h2>";
+                }
                 }
             }
         }

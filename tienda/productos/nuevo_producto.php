@@ -9,7 +9,7 @@
         error_reporting( E_ALL );
         ini_set("display_errors", 1 ); 
 
-        require 'conexion.php';
+        require '../util/conexion.php';
 
         session_start();
         if (isset($_SESSION["usuario"])) {
@@ -22,7 +22,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Nueva categoria</h1>
+        <h1>Nuevo producto</h1>
         <?php
         if($_SERVER["REQUEST_METHOD"] == "POST") {
            $nombre = $_POST["nombre"];
@@ -42,6 +42,26 @@
             <div class="mb-3">
                 <label class="form-label">Descripcion del producto</label>
                 <input class="form-control" type="text" name="descripcion">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Categoria</label>
+                <select class="form-select" name="categoria">
+                    <option value="" selected disabled hidden>---Elige una categoria---</option>
+                    <?php 
+                        foreach ($categorias as $categoria) { ?>
+                            <option value="<?php echo $categoria ?>">
+                                <?php echo $categoria ?>
+                            </option>
+                        <?php } ?> 
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Stock</label>
+                <input class="form-control" type="text" name="stock">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Imagen</label>
+                <input class="form-control" type="file" name="imagen">
             </div>
             <div class="mb-3">
                 <input class="btn btn-primary" type="submit" value="Insertar">
