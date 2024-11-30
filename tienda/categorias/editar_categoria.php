@@ -19,6 +19,11 @@
             exit;
         }
     ?>
+    <style>
+        .error{
+            color: red;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -38,7 +43,13 @@
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $categoria = $_POST["categoria"];
-            $descripcion = $_POST["descripcion"];
+            $tmp_descripcion = $_POST["descripcion"];
+
+            if (strlen($tmp_descripcion) > 255) {
+                $err_descripcion = "La descripcion de la categoria no puede tener mas de 255 caracteres";
+            } else {
+                $descripcion = $tmp_descripcion;
+            }
 
             $sql = "UPDATE categorias SET
                 descripcion = '$descripcion'
@@ -56,6 +67,7 @@
             <div class="mb-3">
                 <label class="form-label">Descripción</label>
                 <textarea class="form-control" name="descripcion"><?php echo $descripcion ?></textarea>
+                <?php if(isset($err_descripcion)) echo "<span class='error'>$err_descripcion</span>" ?>
             </div>
             <div class="mb-3">
                 <input type="hidden" name ="categoria" value="<?php echo $categoria ?>">

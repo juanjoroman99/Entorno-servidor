@@ -34,27 +34,98 @@
                 FROM productos WHERE id_producto = $id_producto";
         $resultado = $_conexion -> query($sql);
 
+        $sql = "SELECT categoria FROM categorias ORDER BY categoria";
+        $resultado = $_conexion -> query($sql);
+        $categorias = [];
+
         while ($fila = $resultado -> fetch_assoc()) {
-            $nombre = $fila["nombre"];
-            $precio = $fila["precio"];
-            $categoria = $fila["categoria"];
-            $stock = $fila["stock"];
-            $descripcion = $fila["descripcion"];
+            array_push($categorias, $fila["categoria"]);
         }
 
         if($_SERVER["REQUEST_METHOD"] == "POST") {
-           $nombre = $_POST["nombre"];
-           $precio = $_POST["precio"]; 
-           $categoria = $_POST["categoria"];
-           $stock = $_POST["sotck"];
-           $descripcion = $_POST["descripcion"];
+           $tmp_nombre = $_POST["nombre"];
+           $tmp_precio = $_POST["precio"]; 
+           $tmp_categoria = $_POST["categoria"];
+           $tmp_stock = $_POST["stock"];
+           $tmp_descripcion = $_POST["descripcion"];
+
+           //validacion del nombre
+           if ($tmp_nombre == '') {
+                $err_nombre = "El nombre es obligatorio";
+           } else {
+                if (strlen($tmp_nombre) < 2 and strlen($tmp_nombre) > 50) {
+                    $err_nombre = "El nombre del producto debe tener entre 2 y 50 caracteres";
+                } else {
+                    $patron = "/^[a-zA-Z0-9 ]{2,50}$/";
+                    if (!preg_match($patron, $tmp_nombre)) {
+                        $err_nombre = "El nombre del producto solo puede contener letras, numeros y espacios";
+                    } else {
+                        $nombre = $tmp_nombre;
+                    }
+                }
+           }
+
+           //validacion del precio
+           if ($tmp_precio == '') {
+                $err_precio = "El precio es obligatorio";
+           } else {
+                $patron = "/^[0-9]{1,4}(\.[0-9]{1,2})?$/";
+                if (!preg_match($patron, $tmp_precio)) {
+                    $err_precio = "El precio no puede ser menor que 0 ni mayor que 9999 y con dos decimales";
+                } else {
+                    $precio = $tmp_precio;
+                }
+           }
+
+           //validacion de descripcion
+           if ($tmp_descripcion == '') {
+            $descripcion = $tmp_descripcion;
+            } else {
+                }if (strlen($tmp_descripcion) > 255) {
+                $err_descripcion = "La descripcion tiene que tener un máximo de 255 caracteres";
+                } else {
+                    $descripcion = $tmp_descripcion;
+            }
+
+            //validacion de stock
+            if ($tmp_stock == '') {
+                $stock = intval($tmp_stock);
+            } else {
+                if (!is_numeric($tmp_stock)) {
+                    $err_stock = "El stock debe ser un numero";
+                }
+            }
+
+            
+
+           $sql = "UPDATE productos SET
+                nombre = '$nombre',
+                precio = '$precio',
+                categoria = '$categoria',
+                stock = '$stock',
+                descripcion = '$descripcion'
+                WHERE id_producto = '$id_producto'
+            ";
+            $_conexion -> query($sql);
         }
-        echo "<h2>" . $nombre . "</h2>";
+
+        if (isset($nombre) and
+            isset($precio) and
+            isset($categoria) and
+            isset($stock) and
+            isset($descripcion)) {
+                echo "<h2>" . $nombre . "</h2>";
+        }
+
         ?>
         <form class="col-6" action="" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">Cambiar nombre</label>
                 <input class="form-control" type="text" name="nombre">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Cambiar precio</label>
+                <input class="form-control" type="text" name="precio">
             </div>
             <div class="mb-3">
                 <label class="form-label">Cambiar descripcion del producto</label>

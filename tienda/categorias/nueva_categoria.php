@@ -43,7 +43,7 @@
                 if (strlen($tmp_categoria) < 2 || strlen($tmp_categoria) > 30) {
                     $err_categoria = "La categoria debe tener entre 2 y 30 caracteres";
                     } else {
-                        $patron = "/^[a-zA-Z]{2,30}$/";
+                        $patron = "/^[a-zA-Z ]{2,30}$/";
                         if (!preg_match($patron,$tmp_categoria)) {
                         $err_categoria = "La categoria solo puede tener letras";
                     } else {
@@ -72,16 +72,15 @@
                 array_push($categorias,$fila["categoria"]);
             }
 
-            for ($i=0; $i < count($categorias); $i++) { 
-                if ($categorias[$i] == $fila) {
-                    $err_categoria = "La categoria ya existe";
-                } else {
-                    $sql = "INSERT INTO categorias (categoria, descripcion)
+            if ($resultado -> num_rows != 0) {
+                $err_categoria = "No puedes introducir una categoria que ya exista";
+            } else {
+                $sql = "INSERT INTO categorias (categoria, descripcion)
                         VALUES ('$categoria', '$descripcion')";
                     
                     $_conexion -> query($sql);
-                }
             }
+
         }
         
         
