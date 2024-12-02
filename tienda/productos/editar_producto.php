@@ -93,10 +93,20 @@
             } else {
                 if (!is_numeric($tmp_stock)) {
                     $err_stock = "El stock debe ser un numero";
+                } else {
+                    $stock = $tmp_stock;
                 }
             }
 
-            
+            //validacion de categoria
+
+            for ($i=0; $i < count($categorias); $i++) { 
+                if ($tmp_categoria != $categorias[$i]) {
+                    $err_categoria = "La categoria introducida no es valida";
+                } else {
+                    $categoria = $tmp_categoria;
+                }
+            }
 
            $sql = "UPDATE productos SET
                 nombre = '$nombre',
@@ -122,14 +132,17 @@
             <div class="mb-3">
                 <label class="form-label">Cambiar nombre</label>
                 <input class="form-control" type="text" name="nombre">
+                <?php if(isset($err_nombre)) echo "<span class='error'>$err_nombre</span>" ?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Cambiar precio</label>
                 <input class="form-control" type="text" name="precio">
+                <?php if(isset($err_precio)) echo "<span class='error'>$err_precio</span>" ?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Cambiar descripcion del producto</label>
                 <input class="form-control" type="text" name="descripcion">
+                <?php if(isset($err_descripcion)) echo "<span class='error'>$err_descripcion</span>" ?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Cambiar categoria</label>
@@ -141,11 +154,13 @@
                                 <?php echo $categoria ?>
                             </option>
                         <?php } ?> 
+                        <?php if(isset($err_categoria)) echo "<span class='error'>$err_categoria</span>" ?>
                 </select>
             </div>
             <div class="mb-3">
                 <label class="form-label">Cambiar stock</label>
                 <input class="form-control" type="text" name="stock">
+                <?php if(isset($err_stock)) echo "<span class='error'>$err_stock</span>" ?>
             </div>
             <div class="mb-3">
                 <input class="btn btn-primary" type="submit" value="Insertar">
