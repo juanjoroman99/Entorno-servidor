@@ -19,6 +19,11 @@
             exit;
         }
     ?>
+    <style>
+        .error{
+            color: red;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -27,21 +32,20 @@
     <?php
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $categoria = $_POST["categoria"];
-            echo "<h1>$categoria</h1>";
             # borrar la categoria
-            $sql = "DELETE FROM categorias WHERE categoria = '$categoria'";
-            $_conexion -> query($sql);
-        }
-
-        if (isset($categoria)) {
-            $sql = "SELECT COUNT(*) as count FROM productos WHERE categoria = '$categoria'";
+            $sql = "SELECT * FROM productos WHERE categoria = '$categoria'";
             $resultado = $_conexion -> query($sql);
-            $fila = $resultado -> fetch_assoc();
 
-            if ($categoria -> num_rows == 1) {
+            if ($resultado -> num_rows == 1) {
                 $err_categoria = "No puedes borrar una categoria que este asociada a un producto";
-            } 
-        }
+            } else {
+                $sql = "DELETE FROM categorias WHERE categoria = '$categoria'";
+                $_conexion -> query($sql);
+            }
+        }   
+
+            
+        
 
         $sql = "SELECT * FROM categorias";
         $resultado = $_conexion -> query($sql);
@@ -75,12 +79,12 @@
                             <input type="hidden" name="categoria" value="<?php echo $fila["categoria"] ?>">
                             <input class="btn btn-danger" type="submit" value="borrar">
                         </form>
-                    </td> <?php if (isset($err_categoria)) echo "<span class='error'>$err_categoria</span>";
-                    echo "</tr>";
-                }  
-            ?>
+                <?php } ?>
+                </td> 
+                    </tr>
         </tbody>
     </table>
+    <?php if (isset($err_categoria)) echo "<span class='error'>$err_categoria</span>";?>
     </div>
    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

@@ -72,7 +72,7 @@
                 array_push($categorias,$fila["categoria"]);
             }
 
-            if ($resultado -> num_rows != 0) {
+            if ($resultado -> num_rows == 1) {
                 $err_categoria = "No puedes introducir una categoria que ya exista";
             } else {
                 $sql = "INSERT INTO categorias (categoria, descripcion)
@@ -80,7 +80,6 @@
                     
                     $_conexion -> query($sql);
             }
-
         }
         
         

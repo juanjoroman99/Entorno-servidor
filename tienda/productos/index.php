@@ -26,21 +26,15 @@
     <h1>Tabla de productos</h1>
     <?php
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $producto = $_POST["producto"];
-            echo "<h1>$producto</h1>";
-            # borrar el anime
-            $sql = "DELETE FROM productos WHERE producto = $producto";
+            $id_producto = $_POST["id_producto"];
+            # borrar el producto
+            $sql = "DELETE FROM productos WHERE id_producto = $id_producto";
             $_conexion -> query($sql);
         }
-
+        
         $sql = "SELECT * FROM productos";
         $resultado = $_conexion -> query($sql);
-        /**
-         * Aplicamos la funcion query a la conexion donde se ejecuta la sentencia sql hecha
-         * 
-         * El resultado se almacena $resultado, que es un objetocon una estructura parecida
-         * a los arrays
-         */
+        
     ?>
     <a class="btn btn-secondary" href="nuevo_producto.php">Crear nuevo producto</a><br><br>
     <table class="table table-striped table-hover">
@@ -66,7 +60,7 @@
                     echo "<td>" . $fila["stock"] . "</td>";
                     ?>
                     <td>
-                        <img width="100" height="200" src="<?php echo $fila["imagen"] ?>">
+                        <img width="150" height="200" src="<?php echo $fila["imagen"] ?>">
                     </td>
                     <?php echo "<td>" . $fila["descripcion"] . "</td>" ?>
                     <td>
@@ -78,7 +72,7 @@
                     <td>
                         <form action="" method="post">
                             <input type="hidden" name="id_producto" value="<?php echo $fila["id_producto"] ?>">
-                            <input class="btn btn-danger" type="submit" value="borrar">
+                            <input class="btn btn-danger" type="submit" value="Borrar">
                         </form>
                     </td>
                     <?php

@@ -101,9 +101,11 @@
             }
 
             //validacion categoria
-            for ($i=0; $i < count($categorias); $i++) { 
-                if ($tmp_categoria != $categorias[$i]) {
-                    $err_categoria = "La categoria introducida no es valida";
+            if (empty($tmp_categoria)) {
+                $err_categoria = "La categoria es obligatoria";
+            } else {
+                if (!in_array($tmp_categoria,$categorias)) {
+                    $err_categoria = "Debes introducir una categoria valida";
                 } else {
                     $categoria = $tmp_categoria;
                 }
@@ -149,8 +151,8 @@
                                 <?php echo $categoria ?>
                             </option>
                         <?php } ?> 
-                        <?php if(isset($err_categoria)) echo "<span class='error'>$err_categoria</span>" ?>
                 </select>
+                <?php if(isset($err_categoria)) echo "<span class='error'>$err_categoria</span>" ?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Stock</label>
