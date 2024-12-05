@@ -33,7 +33,7 @@
                     echo "ole ole";
                     session_start();
                     $_SESSION["usuario"] = "usuario";
-                    header("location: ../util/inicio.php");
+                    header("location: ../util/index.php");
                     exit;
                 } else {
                     echo "<h2>La contraseña es incorrecta</h2>";

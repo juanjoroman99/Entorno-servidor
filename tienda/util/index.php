@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <title>Index de productos</title>
+    <title>Mi tienda</title>
     <?php
         error_reporting( E_ALL );
         ini_set("display_errors", 1 );
@@ -17,13 +17,13 @@
 <body>
     <div class="container">
     
-    <h1>Tabla de productos</h1>
+    <h1>Tienda de Juanito</h1>
     <?php
 
         if (isset($_SESSION["usuario"])) {
             echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
+            echo "<a class='btn btn-light' href='../categorias/index.php'>Ver categorias</a>";
             echo "<a class='btn btn-light' href='../productos/nuevo_producto.php'>Nuevo producto</a>";
-            echo "<a class='btn btn-light' href='../util/index.php'>Volver</a>";
             echo "<a class='btn btn-danger' href='../usuario/cerrar_sesion.php'>Cerrar sesion</a>";
         } else {
             echo "<a class='btn btn-light' href='../usuario/iniciar_sesion.php'>Iniciar sesion</a>";
