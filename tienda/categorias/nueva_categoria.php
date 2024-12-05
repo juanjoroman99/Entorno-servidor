@@ -11,13 +11,13 @@
 
         require '../util/conexion.php';
 
-        /*session_start();
+        session_start();
         if (isset($_SESSION["usuario"])) {
             echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
         } else {
             header("location: ../usuario/iniciar_sesion.php");
             exit;
-        }*/
+        }
     ?>
     <style>
         .error{
@@ -96,7 +96,7 @@
                 <?php if(isset($err_descripcion)) echo "<span class='error'>$err_descripcion</span>" ?>
             </div>
             <div class="mb-3">
-                <input class="btn btn-primary" type="submit" value="Insertar"">
+                <input class="btn btn-success" type="submit" value="Insertar"">
                 <a class="btn btn-secondary" href="index.php">Volver</a>
             </div>
         </form>

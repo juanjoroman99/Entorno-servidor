@@ -138,7 +138,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Descripcion del producto</label>
-                <input class="form-control" type="text" name="descripcion">
+                <textarea class="form-control" type="text" name="descripcion"></textarea>
                 <?php if(isset($err_descripcion)) echo "<span class='error'>$err_descripcion</span>" ?>
             </div>
             <div class="mb-3">
@@ -164,7 +164,7 @@
                 <input class="form-control" type="file" name="imagen">
             </div>
             <div class="mb-3">
-                <input class="btn btn-primary" type="submit" value="Insertar">
+                <input class="btn btn-success" type="submit" value="Insertar">
                 <a class="btn btn-secondary" href="index.php">Volver</a>
             </div>
         </form>

@@ -163,7 +163,7 @@
                 <?php if(isset($err_stock)) echo "<span class='error'>$err_stock</span>" ?>
             </div>
             <div class="mb-3">
-                <input class="btn btn-primary" type="submit" value="Insertar">
+                <input class="btn btn-success" type="submit" value="Insertar">
                 <a class="btn btn-secondary" href="index.php">Volver</a>
             </div>
         </form>

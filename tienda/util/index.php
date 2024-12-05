@@ -23,7 +23,7 @@
         if (isset($_SESSION["usuario"])) {
             echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
             echo "<a class='btn btn-light' href='../categorias/index.php'>Ver categorias</a>";
-            echo "<a class='btn btn-light' href='../productos/nuevo_producto.php'>Nuevo producto</a>";
+            echo "<a class='btn btn-light' href='../productos/index.php'>Ver productos</a>";
             echo "<a class='btn btn-danger' href='../usuario/cerrar_sesion.php'>Cerrar sesion</a>";
         } else {
             echo "<a class='btn btn-light' href='../usuario/iniciar_sesion.php'>Iniciar sesion</a>";
@@ -50,8 +50,6 @@
                 <th>Categoría</th>
                 <th>Stock</th>
                 <th>Imagen</th>
-                <th></th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -67,18 +65,6 @@
                     ?>
                     <td>
                         <img width="150" height="200" src="<?php echo $fila["imagen"] ?>">
-                    </td>
-                    <td>
-                        <a class="btn btn-primary"
-                            href="editar_producto.php?id_producto=<?php echo $fila["id_producto"] ?>">
-                            Editar
-                        </a>
-                    </td>
-                    <td>
-                        <form action="" method="post">
-                            <input type="hidden" name="id_producto" value="<?php echo $fila["id_producto"] ?>">
-                            <input class="btn btn-danger" type="submit" value="Borrar">
-                        </form>
                     </td>
                     <?php
                     echo "</tr>";
