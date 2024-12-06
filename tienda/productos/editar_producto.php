@@ -39,17 +39,21 @@
         }
 
         $id_producto = $_GET["id_producto"];
-        $sql = "SELECT
-                    nombre,
-                    precio,
-                    categoria,
-                    stock,
-                    descripcion
-                FROM productos WHERE id_producto = $id_producto";
+        $sql = "SELECT * FROM productos WHERE id_producto = $id_producto";
         $resultado = $_conexion -> query($sql);
 
-        $sql = "SELECT categoria FROM categorias ORDER BY categoria";
+        while ($fila = $resultado -> fetch_assoc()) {
+            $nombre = $fila["nombre"];
+            $precio = $fila["precio"];
+            $categoria = $fila["categoria"];
+            $stock = $fila["stock"];
+            $imagen = $fila["imagen"];
+            $descripcion = $fila["descripcion"];
+        }
+
+        $sql = "SELECT * FROM categorias ORDER BY categoria";
         $resultado = $_conexion -> query($sql);
+
         $categorias = [];
 
         while ($fila = $resultado -> fetch_assoc()) {
@@ -57,15 +61,15 @@
         }
 
         if($_SERVER["REQUEST_METHOD"] == "POST") {
-           $tmp_nombre = $_POST["nombre"];
-           $tmp_precio = $_POST["precio"]; 
+           $tmp_nombre = depurar($_POST["nombre"]);
+           $tmp_precio = depurar($_POST["precio"]); 
            if (isset($_POST["categoria"])) {
             $tmp_categoria = depurar($_POST["categoria"]);
            } else {
             $tmp_categoria = "";
            }
-           $tmp_stock = $_POST["stock"];
-           $tmp_descripcion = $_POST["descripcion"];
+           $tmp_stock = depurar($_POST["stock"]);
+           $tmp_descripcion = depurar($_POST["descripcion"]);
 
            //validacion del nombre
            if ($tmp_nombre == '') {
@@ -107,7 +111,7 @@
 
             //validacion de stock
             if ($tmp_stock == '') {
-                $stock = intval($tmp_stock);
+                $stock = 0;
             } else {
                 if (!is_numeric($tmp_stock)) {
                     $err_stock = "El stock debe ser un numero";
@@ -145,6 +149,7 @@
                 precio = '$precio',
                 categoria = '$categoria',
                 stock = '$stock',
+                imagen = '$imagen',
                 descripcion = '$descripcion'
                 WHERE id_producto = '$id_producto'
             ";
@@ -155,17 +160,17 @@
         <form class="col-6" action="" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">Cambiar nombre</label>
-                <input class="form-control" type="text" name="nombre">
+                <input class="form-control" type="text" name="nombre" value="<?php echo $nombre ?>">
                 <?php if(isset($err_nombre)) echo "<span class='error'>$err_nombre</span>" ?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Cambiar precio</label>
-                <input class="form-control" type="text" name="precio">
+                <input class="form-control" type="text" name="precio" value ="<?php echo $precio ?>">
                 <?php if(isset($err_precio)) echo "<span class='error'>$err_precio</span>" ?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Cambiar descripcion del producto</label>
-                <input class="form-control" type="text" name="descripcion">
+                <input class="form-control" type="text" name="descripcion" value="<?php echo $descripcion ?>">
                 <?php if(isset($err_descripcion)) echo "<span class='error'>$err_descripcion</span>" ?>
             </div>
             <div class="mb-3">
@@ -183,7 +188,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Cambiar stock</label>
-                <input class="form-control" type="text" name="stock">
+                <input class="form-control" type="text" name="stock" value="<?php echo $stock ?>">
                 <?php if(isset($err_stock)) echo "<span class='error'>$err_stock</span>" ?>
             </div>
             <div class="mb-3">
