@@ -63,7 +63,7 @@
                 <input class="form-control" type="password" name="contrasena">
             </div>
             <div class="mb-3">
-                <input class="btn btn-primary" type="submit" value="Iniciar sesión">
+                <input class="btn btn-success" type="submit" value="Iniciar sesión">
                 <a class="btn btn-secondary" href="registro.php">Registrarse</a>
             </div>
         </form>

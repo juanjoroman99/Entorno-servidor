@@ -150,7 +150,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Descripcion del producto</label>
-                <textarea class="form-control" name="descripcion"><?php echo $descripcion ?></textarea>
+                <textarea class="form-control" name="descripcion"></textarea>
                 <?php if(isset($err_descripcion)) echo "<span class='error'>$err_descripcion</span>" ?>
             </div>
             <div class="mb-3">

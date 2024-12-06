@@ -31,11 +31,16 @@
     <?php
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $categoria = $_POST["categoria"];
-            # borrar la categoria
-            $sql = "SELECT * FROM productos WHERE categoria = '$categoria'";
+            
+            $sql = "SELECT categoria FROM productos";
             $resultado = $_conexion -> query($sql);
+            $categorias = [];
 
-            if ($resultado -> num_rows == 1) {
+            while ($fila = $resultado -> fetch_assoc()) {
+                array_push($categorias, $fila["categoria"]);
+            }
+
+            if (in_array($categoria, $categorias)) {
                 $err_categoria = "No puedes borrar una categoria que este asociada a un producto";
             } else {
                 $sql = "DELETE FROM categorias WHERE categoria = '$categoria'";
