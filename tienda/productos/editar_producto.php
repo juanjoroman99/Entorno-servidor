@@ -15,15 +15,29 @@
         if (isset($_SESSION["usuario"])) {
             echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
         } else {
-            header("location: usuario/iniciar_sesion.php");
+            header("location: ../usuario/iniciar_sesion.php");
             exit;
         }
     ?>
+    <style>
+        .error{
+            color: red;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>Editar producto</h1>
         <?php
+
+        function depurar($entrada){
+            $salida = htmlspecialchars($entrada);
+            $salida = trim($salida);
+            $salida = stripcslashes($salida);
+            $salida = preg_replace('!\s+!', ' ', $salida);
+            return $salida;
+        }
+
         $id_producto = $_GET["id_producto"];
         $sql = "SELECT
                     nombre,
@@ -45,7 +59,11 @@
         if($_SERVER["REQUEST_METHOD"] == "POST") {
            $tmp_nombre = $_POST["nombre"];
            $tmp_precio = $_POST["precio"]; 
-           $tmp_categoria = $_POST["categoria"];
+           if (isset($_POST["categoria"])) {
+            $tmp_categoria = depurar($_POST["categoria"]);
+           } else {
+            $tmp_categoria = "";
+           }
            $tmp_stock = $_POST["stock"];
            $tmp_descripcion = $_POST["descripcion"];
 
@@ -100,15 +118,29 @@
 
             //validacion de categoria
 
-            for ($i=0; $i < count($categorias); $i++) { 
-                if ($tmp_categoria != $categorias[$i]) {
-                    $err_categoria = "La categoria introducida no es valida";
-                } else {
-                    $categoria = $tmp_categoria;
+            if ($tmp_categoria == '') {
+                $err_categoria = "La categoria es obligatoria";
+               } else {
+                    if (strlen($tmp_categoria) < 2 || strlen($tmp_categoria) > 30) {
+                        $err_categoria = "La categoria debe tener entre 2 y 30 caracteres";
+                        } else {
+                            $patron = "/^[a-zA-Z ]{2,30}$/";
+                            if (!preg_match($patron,$tmp_categoria)) {
+                            $err_categoria = "La categoria solo puede tener letras";
+                        } else {
+                            $categoria = $tmp_categoria;
+                        }
+                    }
                 }
-            }
+        }
 
-           $sql = "UPDATE productos SET
+        if (isset($nombre) and
+            isset($precio) and
+            isset($categoria) and
+            isset($stock) and
+            isset($descripcion)) {
+
+                $sql = "UPDATE productos SET
                 nombre = '$nombre',
                 precio = '$precio',
                 categoria = '$categoria',
@@ -117,14 +149,6 @@
                 WHERE id_producto = '$id_producto'
             ";
             $_conexion -> query($sql);
-        }
-
-        if (isset($nombre) and
-            isset($precio) and
-            isset($categoria) and
-            isset($stock) and
-            isset($descripcion)) {
-                echo "<h2>" . $nombre . "</h2>";
         }
 
         ?>
@@ -154,8 +178,8 @@
                                 <?php echo $categoria ?>
                             </option>
                         <?php } ?> 
-                        <?php if(isset($err_categoria)) echo "<span class='error'>$err_categoria</span>" ?>
                 </select>
+                <?php if(isset($err_categoria)) echo "<span class='error'>$err_categoria</span>" ?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Cambiar stock</label>

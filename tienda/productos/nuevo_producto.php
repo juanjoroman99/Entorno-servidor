@@ -15,7 +15,7 @@
         if (isset($_SESSION["usuario"])) {
             echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
         } else {
-            header("location: usuario/iniciar_sesion.php");
+            header("location: ../usuario/iniciar_sesion.php");
             exit;
         }
     ?>
@@ -30,24 +30,36 @@
         <h1>Nuevo producto</h1>
         <?php
 
-    $sql = "SELECT categoria FROM categorias ORDER BY categoria";
-    $resultado = $_conexion -> query($sql);
-    $categorias = [];
+        function depurar($entrada){
+            $salida = htmlspecialchars($entrada);
+            $salida = trim($salida);
+            $salida = stripcslashes($salida);
+            $salida = preg_replace('!\s+!', ' ', $salida);
+            return $salida;
+        }
 
-    while ($fila = $resultado -> fetch_assoc()) {
-        array_push($categorias, $fila["categoria"]);
-    }
+        $sql = "SELECT * FROM categorias ORDER BY categoria";
+        $resultado = $_conexion -> query($sql);
+        $categorias = [];
+
+        while ($fila = $resultado -> fetch_assoc()) {
+            array_push($categorias, $fila["categoria"]);
+        }
 
         if($_SERVER["REQUEST_METHOD"] == "POST") {
 
-           $tmp_nombre = $_POST["nombre"];
-           $tmp_precio = $_POST["precio"]; 
-           $tmp_categoria = $_POST["categoria"];
-           $tmp_stock = $_POST["stock"];
+           $tmp_nombre = depurar($_POST["nombre"]);
+           $tmp_precio = depurar($_POST["precio"]); 
+           if (isset($_POST["categoria"])) {
+            $tmp_categoria = depurar($_POST["categoria"]);
+           } else {
+            $tmp_categoria = "";
+           }
+           $tmp_stock = depurar($_POST["stock"]);
            $nombre_imagen = $_FILES["imagen"]["name"];
            $ubicacion_temporal = $_FILES["imagen"]["tmp_name"];
            $ubicacion_final = "../imagenes/$nombre_imagen";
-           $tmp_descripcion = $_POST["descripcion"];
+           $tmp_descripcion = depurar($_POST["descripcion"]);
 
            move_uploaded_file($ubicacion_temporal,$ubicacion_final);
 
@@ -55,7 +67,7 @@
             if ($tmp_nombre == '') {
                 $err_nombre = "El nombre es obligatorio";
            } else {
-                if (strlen($tmp_nombre) < 2 and strlen($tmp_nombre) > 50) {
+                if (strlen($tmp_nombre) < 2 or strlen($tmp_nombre) > 50) {
                     $err_nombre = "El nombre del producto debe tener entre 2 y 50 caracteres";
                 } else {
                     $patron = "/^[a-zA-Z0-9 ]{2,50}$/";
@@ -138,7 +150,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Descripcion del producto</label>
-                <textarea class="form-control" type="text" name="descripcion"></textarea>
+                <textarea class="form-control" name="descripcion"><?php echo $descripcion ?></textarea>
                 <?php if(isset($err_descripcion)) echo "<span class='error'>$err_descripcion</span>" ?>
             </div>
             <div class="mb-3">

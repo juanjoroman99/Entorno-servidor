@@ -16,9 +16,18 @@
     <div class="container">
         <h1>Inicio de sesión</h1>
         <?php
+
+        function depurar($entrada){
+            $salida = htmlspecialchars($entrada);
+            $salida = trim($salida);
+            $salida = stripcslashes($salida);
+            $salida = preg_replace('!\s+!', ' ', $salida);
+            return $salida;
+        }
+
         if($_SERVER["REQUEST_METHOD"] == "POST") {
-            $usuario = $_POST["usuario"];
-            $contrasena = $_POST["contrasena"];
+            $usuario = depurar($_POST["usuario"]);
+            $contrasena = depurar($_POST["contrasena"]);
 
             $sql ="SELECT * FROM usuarios WHERE usuario = '$usuario'";
             $resultado = $_conexion -> query($sql);

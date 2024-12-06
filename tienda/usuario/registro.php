@@ -17,13 +17,47 @@
         <h1>Registro</h1>
         <?php
         if($_SERVER["REQUEST_METHOD"] == "POST") {
-            $usuario = $_POST["usuario"];
-            $contrasena = $_POST["contrasena"];
+            $tmp_usuario = $_POST["usuario"];
+            $tmp_contrasena = $_POST["contrasena"];
 
             $contrasena_cifrada = password_hash($contrasena,PASSWORD_DEFAULT);
 
-            $sql = "INSERT INTO usuarios VALUES ('$usuario','$contrasena_cifrada')";
-            $_conexion -> query($sql);
+            //validacion del usuario
+
+            if ($tmp_usuario == '') {
+                $err_usuario = "El usuario es obligatorio";
+            } else {
+                if (strlen($tmp_usuario) < 3 or strlen($tmp_usuario) > 15) {
+                    $err_usuario = "El usuario debe tener entre 3 y 15 caracteres";
+                } else {
+                    $patron = "/^[a-zA-Z0-9]$/";
+                    if (!pregmatch($patron, $tmp_usuario)) {
+                        $err_usuario = "El usuario solo puede contener letras y numeros";
+                    }
+                }
+            }
+
+            //validacion de la contraseña
+
+            if ($tmp_contrasena == '') {
+                $err_contrasena = "La contraseña es obligatoria";
+            } else {
+                if (strlen($tmp_contrasena) < 8 and strlen($tmp_contrasena) > 15) {
+                    $err_contrasena = "La contaseña debe tener entre 8 y 15 caracteres";
+                } else {
+                    $patron = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ])$/";
+                    if (!preg_match($patron, $tmp_contrasena)) {
+                        $err_contrasena = "la contraseña debe tener al menos una letra mayuscula, un numero y puede contener caracteres no alfanumericos sin espacios";
+                    } else {
+                        $contrasena = $tmp_contrasena;
+                    }
+                }
+            }
+
+            if (isset($usuario) and isset($contrasena)) {
+                $sql = "INSERT INTO usuarios VALUES ('$usuario','$contrasena_cifrada')";
+                $_conexion -> query($sql);   
+            }
 
             header("location: iniciar_sesion.php");
             exit;

@@ -15,7 +15,7 @@
         if (isset($_SESSION["usuario"])) {
             echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
         } else {
-            header("location: usuario/iniciar_sesion.php");
+            header("location: ../usuario/iniciar_sesion.php");
             exit;
         }
     ?>
@@ -29,7 +29,14 @@
     <div class="container">
         <h1>Editar categoria</h1>
         <?php
-        echo "<h2>" . $_GET["categoria"] . "</h2>";
+
+        function depurar($entrada){
+            $salida = htmlspecialchars($entrada);
+            $salida = trim($salida);
+            $salida = stripcslashes($salida);
+            $salida = preg_replace('!\s+!', ' ', $salida);
+            return $salida;
+        }
         
         $categoria = $_GET["categoria"];
         $sql = "SELECT * FROM categorias WHERE categoria = '$categoria'";

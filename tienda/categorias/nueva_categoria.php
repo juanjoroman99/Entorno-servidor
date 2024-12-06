@@ -29,9 +29,18 @@
     <div class="container">
         <h1>Nueva categoria</h1>
         <?php
+
+        function depurar($entrada){
+            $salida = htmlspecialchars($entrada);
+            $salida = trim($salida);
+            $salida = stripcslashes($salida);
+            $salida = preg_replace('!\s+!', ' ', $salida);
+            return $salida;
+        }
+
         if($_SERVER["REQUEST_METHOD"] == "POST") {
-           $tmp_categoria = $_POST["categoria"];
-           $tmp_descripcion = $_POST["descripcion"];
+           $tmp_categoria = depurar($_POST["categoria"]);
+           $tmp_descripcion = depurar($_POST["descripcion"]);
 
           /* $categoria = $tmp_categoria;
            $descripcion = $tmp_descripcion;*/
@@ -64,7 +73,7 @@
         }
 
         if (isset($categoria) and isset($descripcion)) {
-            $sql = "SELECT categoria FROM categorias ORDER BY categoria";
+            $sql = "SELECT * FROM categorias ORDER BY categoria";
             $resultado = $_conexion -> query($sql);
             $categorias = [];
 
@@ -72,7 +81,7 @@
                 array_push($categorias,$fila["categoria"]);
             }
 
-            if ($resultado -> num_rows == 1) {
+            if (in_array($categoria, $categorias)) {
                 $err_categoria = "No puedes introducir una categoria que ya exista";
             } else {
                 $sql = "INSERT INTO categorias (categoria, descripcion)
