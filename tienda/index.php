@@ -9,7 +9,7 @@
         error_reporting( E_ALL );
         ini_set("display_errors", 1 );
 
-        require('../util/conexion.php');  
+        require('util/conexion.php');  
 
         session_start();
     ?>
@@ -22,12 +22,12 @@
 
         if (isset($_SESSION["usuario"])) {
             echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
-            echo "<a class='btn btn-light' href='../categorias/index.php'>Ver categorias</a>";
-            echo "<a class='btn btn-light' href='../productos/index.php'>Ver productos</a>";
-            echo "<a class='btn btn-primary' href='../usuario/cambiar_credenciales.php'>Cambiar credenciales</a>";
-            echo "<a class='btn btn-danger' href='../usuario/cerrar_sesion.php'>Cerrar sesion</a>";
+            echo "<a class='btn btn-light' href='categorias/index.php'>Ver categorias</a>";
+            echo "<a class='btn btn-light' href='productos/index.php'>Ver productos</a>";
+            echo "<a class='btn btn-primary' href='usuario/cambiar_credenciales.php'>Cambiar credenciales</a>";
+            echo "<a class='btn btn-danger' href='usuario/cerrar_sesion.php'>Cerrar sesion</a>";
         } else {
-            echo "<a class='btn btn-light' href='../usuario/iniciar_sesion.php'>Iniciar sesion</a>";
+            echo "<a class='btn btn-light' href='usuario/iniciar_sesion.php'>Iniciar sesion</a>";
         }
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {

@@ -37,16 +37,16 @@
             } else {
                 if (isset($usuario) and isset($contrasena)) {
                     $datos_usuario = $resultado -> fetch_assoc();
-                $acceso_concedido = password_verify($contrasena,$datos_usuario["contrasena"]);
-                if ($acceso_concedido) {
-                    echo "ole ole";
-                    session_start();
-                    $_SESSION["usuario"] = "usuario";
-                    header("location: ../util/index.php");
-                    exit;
-                } else {
+                    $acceso_concedido = password_verify($contrasena,$datos_usuario["contrasena"]);
+                    if ($acceso_concedido) {
+                        echo "ole ole";
+                        session_start();
+                        $_SESSION["usuario"] = "usuario";
+                        header("location: ../index.php");
+                        exit;
+                    } else {
                     echo "<h2>La contraseña es incorrecta</h2>";
-                }
+                    }
                 }
             }
         }

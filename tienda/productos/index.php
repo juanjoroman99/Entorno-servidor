@@ -23,10 +23,10 @@
         if (isset($_SESSION["usuario"])) {
             echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
             echo "<a class='btn btn-light' href='../productos/nuevo_producto.php'>Nuevo producto</a>";
-            echo "<a class='btn btn-light' href='../util/index.php'>Volver</a>";
+            echo "<a class='btn btn-light' href='../index.php'>Volver</a>";
             echo "<a class='btn btn-danger' href='../usuario/cerrar_sesion.php'>Cerrar sesion</a>";
         } else {
-            echo "<a class='btn btn-light' href='../usuario/iniciar_sesion.php'>Iniciar sesion</a>";
+            echo "<a class='btn btn-light' href='../index.php'>Iniciar sesion</a>";
         }
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {

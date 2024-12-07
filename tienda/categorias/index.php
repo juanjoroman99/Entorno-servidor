@@ -15,7 +15,7 @@
         if (isset($_SESSION["usuario"])) {
             echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
         } else {
-            header("location: ../productos/index.php");
+            header("location: ../index.php");
             exit;
         }
     ?>
@@ -56,7 +56,7 @@
         
     ?>
     <a class="btn btn-light" href="nueva_categoria.php">Crear nueva categoria</a>
-    <a class="btn btn-light" href="../util/index.php">Volver</a><br>
+    <a class="btn btn-light" href="../index.php">Volver</a><br>
     <table class="table table-striped table-hover">
         <thead class="table-dark">
             <tr>
