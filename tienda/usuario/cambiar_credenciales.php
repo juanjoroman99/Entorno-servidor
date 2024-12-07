@@ -9,13 +9,13 @@
     error_reporting( E_ALL );
     ini_set("display_errors", 1 );  
 
-    require ('../util/conexion.php'); 
+    require '../util/conexion.php'; 
     
     session_start();
     if(isset($_SESSION["usuario"])){
-        echo "<h2 class='titulo'>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
+        echo "<h2 class='titulo'>Sesion de " . $_SESSION["usuario"] . "</h2>";
     }else{
-        header("location: ../index.php");
+        header("location: iniciar_sesion.php");
         exit;
     }
      
@@ -39,14 +39,14 @@
         return $salida;
     }
    
-        $usuario = $_SESSION["usuario"];
-         
+        $usuario_session = $_SESSION["usuario"];
+        $sql = "SELECT usuario FROM usuarios WHERE usuario = '$usuario_session'";
 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         $usuario = depurar($_POST["usuario"]);
         $tmp_nueva_contrasena = depurar($_POST["nueva_contrasena"]);
 
-        //validacion de contraseña
+        //VALIDAR CONTRASENA
         if($tmp_nueva_contrasena == ''){
             $err_contrasena = "Debe introducir una nueva contrasena";
         }else{
@@ -55,7 +55,7 @@
             }else{
                 $patron = "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,15}$/";
                 if(!preg_match($patron,$tmp_nueva_contrasena)){
-                    $err_contrasena = "La contraseña debe estar compuesta por letras numero y otros caracteres que no sean espacios";
+                    $err_contrasena = "Debe incluir numeros, letras y espacios ";
                 } else {
                     $contrasena_cambiada = $tmp_nueva_contrasena;
                 }
@@ -64,7 +64,7 @@
         }
     }
     
-    if(isset($contrasena_cambiada) and isset ($usuario)){
+    if(isset($contrasena_cambiada)){
 
         $contrasena_cifrada = password_hash($contrasena_cambiada,PASSWORD_DEFAULT);
         $sql = "UPDATE usuarios SET contrasena = '$contrasena_cifrada' 
@@ -74,11 +74,11 @@
     }
 ?>
 <div class= "container">    
-<h1>Cambiar contraseña</h1>    
-<form class="col-6" action="" method="post" enctype="multipart/form-data"> 
+<h1>Cambiar contrasena</h1>    
+<form class="col-6" action="" method="post" enctype="multipart/form-data"> <!-- El enctype es para la imagen, pero no interfiere si lo dejamos y no hay imagen -->
         <div class="mb-3">
             <label class="form-label">Usuario</label>
-            <input class="form-control" type="text" name="usuario" value="<?php echo $usuario ?>" disabled>
+            <input class="form-control" type="text" name="usuario" value="<?php echo $usuario_session ?>" disabled>
             <?php if(isset($err_usuario)) echo "<span class='error'>$err_usuario</span>" ?>
         </div>
         <div class="mb-3">

@@ -28,6 +28,7 @@
             echo "<a class='btn btn-danger' href='usuario/cerrar_sesion.php'>Cerrar sesion</a>";
         } else {
             echo "<a class='btn btn-light' href='usuario/iniciar_sesion.php'>Iniciar sesion</a>";
+            echo "<a class='btn btn-light' href='usuario/registro.php'>Registrarse</a>";
         }
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {

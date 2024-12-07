@@ -9,7 +9,7 @@
         error_reporting( E_ALL );
         ini_set("display_errors", 1 ); 
 
-        require ('../util/conexion.php'); 
+        require ('../util//conexion.php'); 
     ?>
 </head>
 <body>
@@ -19,58 +19,45 @@
         if($_SERVER["REQUEST_METHOD"] == "POST") {
             $tmp_usuario = $_POST["usuario"];
             $tmp_contrasena = $_POST["contrasena"];
-            
-            $sql = "SELECT * FROM usuarios";
-            $resultado = $_conexion -> query($sql);
-            $usuarios = [];
 
-            while ($fila = $resultado -> fetch_assoc()) {
-                $usuario = $fila["usuario"];
-                $contrasena = $fila["contrasena"];
-            }
-
-            //validacion del usuario
-            if (in_array($tmp_usuario, $usuarios)) {
-                $err_usuario = "Ese usuario ya existe elige otro";
+            //validacion usuario
+            if ($tmp_usuario == '') {
+                $err_usuario = "El usuario es obligatorio";
             } else {
-                if ($tmp_usuario == '') {
-                    $err_usuario = "El usuario es obligatorio";
+                $patron = "/^[a-zA-Z0-9]{3,15}$/";
+                if (!preg_match($patron,$tmp_usuario)) {
+                    $err_usuario = "El usuario solo puede contener letras y numeros";
                 } else {
-                    if (strlen($tmp_usuario) < 3 or strlen($tmp_usuario) > 15) {
-                        $err_usuario = "El usuario debe tener entre 3 y 15 caracteres";
-                    } else {
-                        $patron = "/^[a-zA-Z0-9]$/";
-                        if (!pregmatch($patron, $tmp_usuario)) {
-                            $err_usuario = "El usuario solo puede contener letras y numeros";
-                        } else {
-                            $usuario = $tmp_usuario;
-                        }
-                    }
+                    $usuario = $tmp_usuario;
                 }
             }
 
-            //validacion de la contraseña
-
+            //validacion contraseña
             if ($tmp_contrasena == '') {
-                $err_contrasena = "La contraseña es obligatoria";
+                $err_contrasena = "La contrasela es obligatoria";
             } else {
-                if (strlen($tmp_contrasena) < 8 and strlen($tmp_contrasena) > 15) {
-                    $err_contrasena = "La contaseña debe tener entre 8 y 15 caracteres";
+                $patron = "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,15}$/";
+                if (!preg_match($patron,$tmp_contrasena)) {
+                    $err_contrasena = "La contrasela solo puede contener numero, letras (Mayusculas o minusculas) y caracteres no alfanumericos sin espacios";
                 } else {
-                    $patron = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ])$/";
-                    if (!preg_match($patron, $tmp_contrasena)) {
-                        $err_contrasena = "la contraseña debe tener al menos una letra mayuscula, un numero y puede contener caracteres no alfanumericos sin espacios";
-                    } else {
-                        $contrasena = $tmp_contrasena;
-                    }
+                    $contrasena = $tmp_contrasena;
                 }
             }
-
+            
             if (isset($usuario) and isset($contrasena)) {
                 $contrasena_cifrada = password_hash($contrasena,PASSWORD_DEFAULT);
-                $sql = "INSERT INTO usuarios VALUES ('$usuario','$contrasena_cifrada')";
-                $_conexion -> query($sql);   
+
+                $sql = "SELECT usuario FROM usuarios ORDER BY usuario";
+                $resultado = $_conexion -> query($sql);
+
+                if ($resultado -> num_rows != 0) {
+                    echo "<span class='error'>El usuario ya existe</span>";
+                } else {
+                    $sql = "INSERT INTO usuarios VALUES ('$usuario','$contrasena_cifrada')";
+                    $_conexion -> query($sql);
+                }
             }
+            
 
             header("location: iniciar_sesion.php");
             exit;
@@ -82,14 +69,16 @@
             <div class="mb-3">
                 <label class="form-label">Usuario</label>
                 <input class="form-control" type="text" name="usuario">
+                <?php if(isset($err_usuario)) echo "<span class='error'>$err_usuario</span>" ?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Contraseña</label>
                 <input class="form-control" type="password" name="contrasena">
+                <?php if(isset($err_contrasena)) echo "<span class='error'>$err_contrasena</span>" ?>
             </div>
             <div class="mb-3">
-                <input class="btn btn-primary" type="submit" value="Registrarse">
-                <a class="btn btn-secondary" href="iniciar_sesion.php">Iniciar sesión</a>
+                <input class="btn btn-success" type="submit" value="Registrarse">
+                <a class="btn btn-secondary" href="../index.php">Volver</a>
             </div>
         </form>
     </div>
