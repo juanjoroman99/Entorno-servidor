@@ -19,20 +19,32 @@
         if($_SERVER["REQUEST_METHOD"] == "POST") {
             $tmp_usuario = $_POST["usuario"];
             $tmp_contrasena = $_POST["contrasena"];
+            
+            $sql = "SELECT * FROM usuarios";
+            $resultado = $_conexion -> query($sql);
+            $usuarios = [];
 
-            $contrasena_cifrada = password_hash($contrasena,PASSWORD_DEFAULT);
+            while ($fila = $resultado -> fetch_assoc()) {
+                $usuario = $fila["usuario"];
+                $contrasena = $fila["contrasena"];
+            }
 
             //validacion del usuario
-
-            if ($tmp_usuario == '') {
-                $err_usuario = "El usuario es obligatorio";
+            if (in_array($tmp_usuario, $usuarios)) {
+                $err_usuario = "Ese usuario ya existe elige otro";
             } else {
-                if (strlen($tmp_usuario) < 3 or strlen($tmp_usuario) > 15) {
-                    $err_usuario = "El usuario debe tener entre 3 y 15 caracteres";
+                if ($tmp_usuario == '') {
+                    $err_usuario = "El usuario es obligatorio";
                 } else {
-                    $patron = "/^[a-zA-Z0-9]$/";
-                    if (!pregmatch($patron, $tmp_usuario)) {
-                        $err_usuario = "El usuario solo puede contener letras y numeros";
+                    if (strlen($tmp_usuario) < 3 or strlen($tmp_usuario) > 15) {
+                        $err_usuario = "El usuario debe tener entre 3 y 15 caracteres";
+                    } else {
+                        $patron = "/^[a-zA-Z0-9]$/";
+                        if (!pregmatch($patron, $tmp_usuario)) {
+                            $err_usuario = "El usuario solo puede contener letras y numeros";
+                        } else {
+                            $usuario = $tmp_usuario;
+                        }
                     }
                 }
             }
@@ -55,6 +67,7 @@
             }
 
             if (isset($usuario) and isset($contrasena)) {
+                $contrasena_cifrada = password_hash($contrasena,PASSWORD_DEFAULT);
                 $sql = "INSERT INTO usuarios VALUES ('$usuario','$contrasena_cifrada')";
                 $_conexion -> query($sql);   
             }
