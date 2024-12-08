@@ -49,7 +49,7 @@
                         if ($acceso_concedido) {
                             echo "ole ole";
                             session_start();
-                            $_SESSION["usuario"] = "usuario";
+                            $_SESSION["usuario"] = $usuario;
                             header("location: ../index.php");
                             exit;
                         } else {

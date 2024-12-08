@@ -66,7 +66,7 @@
                     
                     ?>
                     <td>
-                        <img width="150" height="200" src="<?php echo $fila["imagen"] ?>">
+                        <img width="100" height="100" src="./imagenes/<?php echo $fila["imagen"] ?>" alt="">
                     </td>
                     <?php
                     echo "</tr>";

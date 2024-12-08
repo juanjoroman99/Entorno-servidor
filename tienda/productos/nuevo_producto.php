@@ -13,7 +13,7 @@
 
         session_start();
         if (isset($_SESSION["usuario"])) {
-            echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
+            echo "<h2 class='titulo'>Sesion de  " . $_SESSION["usuario"] . "</h2>";
         } else {
             header("location: ../index.php");
             exit;
@@ -22,6 +22,9 @@
     <style>
         .error{
             color: red;
+        }
+        .titulo{
+            color: grey;
         }
     </style>
 </head>
@@ -169,7 +172,7 @@
             <div class="mb-3">
                 <label class="form-label">Stock</label>
                 <input class="form-control" type="text" name="stock">
-                <?php if(isset($err_stock)) echo "<span class'error'>$err_stock</span>" ?>
+                <?php if(isset($err_stock)) echo "<span class='error'>$err_stock</span>" ?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Imagen</label>
