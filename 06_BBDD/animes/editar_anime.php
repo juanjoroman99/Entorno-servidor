@@ -41,8 +41,18 @@
 
         echo"<h2>$titulo</h2>";
 
-        $sql = "SELECT * FROM estudios ORDER BY nombre_estudio";
-        $resultado = $_conexion -> query($sql);
+        /*$sql = "SELECT * FROM estudios ORDER BY nombre_estudio";
+        $resultado = $_conexion -> query($sql);*/
+
+        #1. Prepare
+        $sql = $_conexion -> prepare("SELECT * FROM estudios ORDER BY ?");
+        #2. Bind
+        $sql -> bind_param("s", $nombre_estudio);
+        #3. Execute
+        $sql -> execute();
+        #4. Retrive
+        $resultado = $sql -> get_result();
+        
         $estudios = [];
 
         while ($fila = $resultado -> fetch_assoc()) {
@@ -76,6 +86,7 @@
             $sql -> execute();
 
             $_conexion -> close();
+            
         }
 
         ?>
