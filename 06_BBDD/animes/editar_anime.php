@@ -55,14 +55,27 @@
             $anno_estreno = $_POST["anno_estreno"];
             $num_temporadas = $_POST["num_temporadas"];
 
-            $sql = "UPDATE animes SET
+            //1. Prepare
+            $sql = $_conexion -> prepare("UPDATE animes SET
                 titulo = '$titulo',
                 nombre_estudio = '$nombre_estudio',
                 anno_estreno = '$anno_estreno',
                 num_temporadas = '$num_temporadas'
                 WHERE id_anime = '$id_anime'
-            ";
-            $_conexion -> query($sql);
+            ");
+            
+            //2. Bind
+            $sql -> bind_param("ssiii",
+                $titulo,
+                $nombre_estudio,
+                $anno_estreno,
+                $num_temporadas,
+                $id_anime);
+            
+            //3. Execute
+            $sql -> execute();
+
+            $_conexion -> close();
         }
 
         ?>

@@ -40,7 +40,7 @@
                     //ole ole
                     echo "ole ole";
                     session_start();
-                    $_SESSION["usuario"] = "usuario";
+                    $_SESSION["usuario"] = $usuario;
                     //$_COOKIE["whatever"] = "whatever";
                     header("location: ../index.php");
                     exit;

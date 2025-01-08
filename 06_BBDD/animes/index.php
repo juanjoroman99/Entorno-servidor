@@ -29,8 +29,21 @@
             $id_anime = $_POST["id_anime"];
             echo "<h1>$id_anime</h1>";
             # borrar el anime
-            $sql = "DELETE FROM animes WHERE id_anime = $id_anime";
-            $_conexion -> query($sql);
+            /*$sql = "DELETE FROM animes WHERE id_anime = $id_anime";
+            $_conexion -> query($sql);*/
+
+            //1. Prepare
+            $sql = $_conexion -> prepare("DELETE FROM animes WHERE id_anime = $id_anime
+                VALUES (?)");
+            
+            //2. Enlazado
+            $sql -> bind_param("i",
+                $id_anime);
+
+            //3. Ejecución
+            $sql -> execute();
+
+            $_conexion -> close();
         }
 
         $sql = "SELECT * FROM animes";
