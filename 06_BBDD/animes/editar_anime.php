@@ -67,11 +67,11 @@
 
             //1. Prepare
             $sql = $_conexion -> prepare("UPDATE animes SET
-                titulo = '$titulo',
-                nombre_estudio = '$nombre_estudio',
-                anno_estreno = '$anno_estreno',
-                num_temporadas = '$num_temporadas'
-                WHERE id_anime = '$id_anime'
+                titulo = ?,
+                nombre_estudio = ?,
+                anno_estreno = ?,
+                num_temporadas = ?
+                WHERE id_anime = ?
             ");
             
             //2. Bind
