@@ -34,8 +34,17 @@
             $usuario = depurar($_POST["usuario"]);
             $contrasena = depurar($_POST["contrasena"]);
 
-            $sql ="SELECT * FROM usuarios WHERE usuario = '$usuario'";
-            $resultado = $_conexion -> query($sql);
+            /*$sql ="SELECT * FROM usuarios WHERE usuario = '$usuario'";
+            $resultado = $_conexion -> query($sql);*/
+
+            #1. Prepare
+            $sql = $_conexion -> prepare("SELECT * FROM usuarios WHERE usuario = ?
+                VALUES (?)");
+            #2. Binding
+            $sql -> bind_param("s", $usuario);
+            #3.Execute
+            $sql -> execute();
+            $_conexion -> close();
 
             if ($usuario == '') {
                 $err_usuario = "El usuario es obligatorio";

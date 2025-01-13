@@ -80,8 +80,16 @@
             if($resultado -> num_rows != 0 ){
                 echo "<h2 class='error'>El usuario $usuario ya existe</h2>";
             } else{
-                $sql = "INSERT INTO usuarios VALUES ('$usuario','$contrasena_cifrada')";
-                $_conexion -> query($sql);
+                /*$sql = "INSERT INTO usuarios VALUES ('$usuario','$contrasena_cifrada')";
+                $_conexion -> query($sql);*/
+
+                #1. Prepare
+                $sql = $_conexion -> prepare("INSERT INTO usuarios VALUES (?, ?)");
+                #2. Bind
+                $sql -> bind_param("ss", $usuario, $contrasena_cifrada);
+                #3. Execute
+                $sql -> execute();
+                $_conexion -> close();
         
                 header("location: iniciar_sesion.php");
                 exit;

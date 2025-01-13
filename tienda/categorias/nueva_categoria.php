@@ -73,8 +73,18 @@
         }
 
         if (isset($categoria) and isset($descripcion)) {
-            $sql = "SELECT * FROM categorias ORDER BY categoria";
-            $resultado = $_conexion -> query($sql);
+            /*$sql = "SELECT * FROM categorias ORDER BY categoria";
+            $resultado = $_conexion -> query($sql);*/
+
+            #1. Prepare
+            $sql = $_conexion -> prepare("SELECT * FROM categorias ORDER BY ?");
+            #2. Bind
+            $sql -> bind_param("s", $categoria);
+            #3. Execute
+            $sql -> execute();
+            #4. Retrive
+            $resultado = $resultado -> get_result();
+
             $categorias = [];
 
             while ($fila = $resultado -> fetch_assoc()) {
@@ -84,10 +94,19 @@
             if (in_array($categoria, $categorias)) {
                 $err_categoria = "No puedes introducir una categoria que ya exista";
             } else {
-                $sql = "INSERT INTO categorias (categoria, descripcion)
+                /*$sql = "INSERT INTO categorias (categoria, descripcion)
                         VALUES ('$categoria', '$descripcion')";
                     
-                    $_conexion -> query($sql);
+                    $_conexion -> query($sql);*/
+                #1. Prepare
+                $sql = "INSERT INTO categorias (categoria, descripcion)
+                        VALUES (?, ?)";
+                #2. Bind
+                $sql -> bind_param("ss", $categoria, $descripcion);
+                #3. Execute
+                $sql -> execute();
+                $_conexion();
+
             }
         }
         

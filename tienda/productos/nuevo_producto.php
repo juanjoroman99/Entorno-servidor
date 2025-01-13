@@ -41,8 +41,18 @@
             return $salida;
         }
 
-        $sql = "SELECT * FROM categorias ORDER BY categoria";
-        $resultado = $_conexion -> query($sql);
+        /*$sql = "SELECT * FROM categorias ORDER BY categoria";
+        $resultado = $_conexion -> query($sql);*/
+
+        #1. Prepare
+        $sql = $_conexion -> prepare("SELECT * FROM categorias ORDER BY ?");
+        #2. Bind
+        $sql -> bind_param("s", $categoria);
+        #3. Execute
+        $sql -> execute();
+        #4. Retrive
+        $resultado = $resultado -> get_result();
+
         $categorias = [];
 
         while ($fila = $resultado -> fetch_assoc()) {
@@ -132,9 +142,18 @@
                 isset($descripcion) and
                 isset($stock)) {
                 
-                    $sql = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion)
+                    /*$sql = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion)
                         VALUES('$nombre', '$precio', '$categoria', '$stock', '$ubicacion_final', '$descripcion')";
-                    $_conexion -> query($sql);
+                    $_conexion -> query($sql);*/
+                    
+                #1. Prepare
+                $sql = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion)
+                        VALUES(?, ?, ?, ?, ?, ?)";
+                #2. Bind
+                $sql -> bind_param("sisis", $nombre, $precio, $categoria, $stock, $descripcion);
+                #3. Execute
+                $sql -> execute();
+                $_conexion -> close();
             }
 
         }

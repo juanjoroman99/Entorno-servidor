@@ -39,8 +39,17 @@
         return $salida;
     }
    
-        $usuario_session = $_SESSION["usuario"];
-        $sql = "SELECT usuario FROM usuarios WHERE usuario = '$usuario_session'";
+        /*$usuario_session = $_SESSION["usuario"];
+        $sql = "SELECT usuario FROM usuarios WHERE usuario = '$usuario_session'";*/
+
+        #1 prepare
+        $sql = $_conexion -> prepare("SELECT usuario FROM usuarios WHERE usuario = ?");
+        #2 binding
+        $sql -> bind_param("s", $usuario);
+        #3 execute
+        $sql -> execute();
+        #4 Retrive
+        $resultado = $sql -> get_result();
 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         $usuario = depurar($_POST["usuario"]);
@@ -67,9 +76,17 @@
     if(isset($contrasena_cambiada)){
 
         $contrasena_cifrada = password_hash($contrasena_cambiada,PASSWORD_DEFAULT);
-        $sql = "UPDATE usuarios SET contrasena = '$contrasena_cifrada' 
+        /*$sql = "UPDATE usuarios SET contrasena = '$contrasena_cifrada' 
         WHERE usuario = '$usuario'";
-        $_conexion -> query($sql); 
+        $_conexion -> query($sql); */
+
+        #1 prepare
+        $sql = $_conexion -> prepare("UPDATE usuarios SET contrasena = ?");
+        #2 binding
+        $sql -> bind_param("s", $usuario);
+        #3 execute
+        $sql -> execute();
+        $_conexion -> close();
         
     }
 ?>

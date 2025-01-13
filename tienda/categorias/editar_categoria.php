@@ -38,9 +38,18 @@
             return $salida;
         }
         
-        $categoria = $_GET["categoria"];
+        /*$categoria = $_GET["categoria"];
         $sql = "SELECT * FROM categorias WHERE categoria = '$categoria'";
-        $resultado = $_conexion -> query($sql);
+        $resultado = $_conexion -> query($sql);*/
+
+        #1. Prepare
+        $sql = $_conexion -> prepare("SELECT * FROM categorias WHERE categoria = ?");
+        #2. Bind
+        $sql -> bind_param("s", $categoria);
+        #3. Execute
+        $sql -> execute();
+        #4. Retrive
+        $resultado = $sql -> get_result();
 
         
         while ($fila = $resultado -> fetch_assoc()) {
@@ -58,11 +67,22 @@
                 $descripcion = $tmp_descripcion;
             }
 
-            $sql = "UPDATE categorias SET
+            /*$sql = "UPDATE categorias SET
                 descripcion = '$descripcion'
                 WHERE categoria = '$categoria'
             ";
-            $_conexion -> query($sql);
+            $_conexion -> query($sql);*/
+
+            #1. Prepare
+            $sql = $_conexion -> prepare("UPDATE categorias SET
+            descripcion = ?
+            WHERE categoria = ?
+            ");
+            #2. Bind
+            $sql -> bind_param("ss", $categoria, $descripcion);
+            #3. Exceute
+            $sql -> execute();
+            $_conexion -> close();
         }
 
         ?>

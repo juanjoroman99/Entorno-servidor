@@ -38,9 +38,18 @@
             return $salida;
         }
 
-        $id_producto = $_GET["id_producto"];
+        /*$id_producto = $_GET["id_producto"];
         $sql = "SELECT * FROM productos WHERE id_producto = $id_producto";
-        $resultado = $_conexion -> query($sql);
+        $resultado = $_conexion -> query($sql);*/
+
+        #1. Prepare
+        $sql = $_conexion -> prepare("SELECT * FROM productos WHERE producto = ?");
+        #2. Bind
+        $sql -> bind_param("s", $id_producto);
+        #3. Execute
+        $sql -> execute();
+        #4. Retrive
+        $resultado = $sql -> get_result();
 
         while ($fila = $resultado -> fetch_assoc()) {
             $nombre = $fila["nombre"];
@@ -51,8 +60,17 @@
             $descripcion = $fila["descripcion"];
         }
 
-        $sql = "SELECT * FROM categorias ORDER BY categoria";
-        $resultado = $_conexion -> query($sql);
+        /*$sql = "SELECT * FROM categorias ORDER BY categoria";
+        $resultado = $_conexion -> query($sql);*/
+
+        #1. Prepare
+        $sql = $_conexion -> prepare("SELECT * FROM categorias WHERE categoria = ?");
+        #2. Bind
+        $sql -> bind_param("s", $categoria);
+        #3. Execute
+        $sql -> execute();
+        #4. Retrive
+        $resultado = $sql -> get_result();
 
         $categorias = [];
 
@@ -144,7 +162,7 @@
             isset($stock) and
             isset($descripcion)) {
 
-                $sql = "UPDATE productos SET
+        /*        $sql = "UPDATE productos SET
                 nombre = '$nombre',
                 precio = '$precio',
                 categoria = '$categoria',
@@ -153,7 +171,27 @@
                 descripcion = '$descripcion'
                 WHERE id_producto = '$id_producto'
             ";
-            $_conexion -> query($sql);
+            $_conexion -> query($sql);*/
+
+            #1. Prepare
+            $sql = $_conexion -> prepare("UPDATE categorias SET
+            nombre = ?,
+            precio = ?,
+            categoria = ?,
+            stock = ?,
+            descripcion = ?
+            WHERE producto = ?
+            ");
+            #2. Bind
+            $sql -> bind_param("sisis",
+            $nombre,
+            $precio,
+            $categoria,
+            $stock,
+            $descripcion);
+            #3. Exceute
+            $sql -> execute();
+            $_conexion -> close();
         }
 
         ?>
