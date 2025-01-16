@@ -55,7 +55,6 @@
              //1. Preparación
             $sql = $_conexion -> prepare("INSERT INTO animes (titulo, nombre_estudio, anno_estreno, num_temporadas, imagen) 
                 VALUES (?, ?, ?, ?, ?)");
-            
             //2. Enlazado
             $sql -> bind_param("ssiis",
                 $titulo,
@@ -63,15 +62,22 @@
                 $anno_estreno,
                 $num_temporadas,
                 $ubicacion_final);
-
             //3. Ejecución
             $sql -> execute();
-
             $_conexion -> close();
         }
         
-        $sql = "SELECT * FROM estudios ORDER BY nombre_estudio";
-        $resultado = $_conexion -> query($sql);
+        /*$sql = "SELECT * FROM estudios ORDER BY nombre_estudio";
+        $resultado = $_conexion -> query($sql);*/
+        #1. Prepare
+        $sql = $_conexion -> prepare("SELECT * FROM estudios ORDER BY ?");
+        #2. Bind
+        $sql -> bind_param("s", $nombre_estudio);
+        #3. Execute
+        $resultado = $sql -> execute();
+        #4. Retrive
+        $resultado = $sql -> get_result();
+        $_conexion -> close();
         $estudios = [];
 
         while ($fila = $resultado -> fetch_assoc()) {

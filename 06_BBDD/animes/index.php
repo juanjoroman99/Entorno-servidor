@@ -33,8 +33,7 @@
             $_conexion -> query($sql);*/
 
             //1. Prepare
-            $sql = $_conexion -> prepare("DELETE FROM animes WHERE id_anime = ?
-                VALUES (?)");
+            $sql = $_conexion -> prepare("DELETE FROM animes WHERE id_anime = ?");
             
             //2. Enlazado
             $sql -> bind_param("i", $id_anime);

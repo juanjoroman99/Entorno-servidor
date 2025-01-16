@@ -38,12 +38,13 @@
             $resultado = $_conexion -> query($sql);*/
 
             #1. Prepare
-            $sql = $_conexion -> prepare("SELECT * FROM usuarios WHERE usuario = ?
-                VALUES (?)");
+            $sql = $_conexion -> prepare("SELECT * FROM usuarios WHERE usuario = ?");
             #2. Binding
             $sql -> bind_param("s", $usuario);
             #3.Execute
             $sql -> execute();
+            #4. Retrive
+            $resultado = $sql -> get_result();
             $_conexion -> close();
 
             if ($usuario == '') {
