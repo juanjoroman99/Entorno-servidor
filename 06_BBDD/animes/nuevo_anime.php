@@ -24,7 +24,7 @@
     <div class="container">
         <h1>Nuevo anime</h1>
         <?php
-        if($_SERVER["REQUEST_METHOD"] == "POST") {
+        if($_SERVER["REQUEST_METHOD"] == "POST") { 
             $titulo = $_POST["titulo"];
             $nombre_estudio = $_POST["nombre_estudio"];
             $anno_estreno = $_POST["anno_estreno"];

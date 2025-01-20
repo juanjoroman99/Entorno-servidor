@@ -19,10 +19,10 @@
             manejarPost($_conexion, $entrada);
             break;
         case "PUT":
-            echo json_encode(["metodo" => "put"]);
+            manejarPut($_conexion, $entrada);
             break;
         case "DELETE":
-            echo json_encode(["metodo" => "delete"]);
+            manejarDelete($_conexion, $entrada);
             break;
         default:
             echo json_encode(["metodo" => "otro"]);
@@ -30,9 +30,15 @@
     }
 
     function manejarGet($_conexion) {
-        $sql = "SELECT * FROM animes";
-        $stmt = $_conexion -> prepare($sql);
-        $stmt -> execute();
+        if (isset($_GET["titulo"])) {
+            $sql = "SELECT * FROM animes WHERE titulo = :titulo";
+            $stmt = $_conexion -> prepare($sql);
+            $stmt -> execute([
+                "titulo" => $_GET["titulo"]
+            ]);
+        } else if (isset($_GET["anno_estreno"])){
+            $sql = "SELECT * FROM animes WHERE anno_estreno"
+        }
         $resultado = $stmt -> fetchAll(PDO::FETCH_ASSOC);   # Equivalente al getResult de mysqli
         echo json_encode($resultado);
     }
