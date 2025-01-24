@@ -3,7 +3,7 @@
     ini_set("display_errors", 1 );
 
     header("Content-Type: application/json");
-    include("conexion_pdo.php");
+    include("./conexion_pdo.php");
 
     $metodo = $_SERVER["REQUEST_METHOD"];
     $entrada = json_decode(file_get_contents('php://input'), true);
@@ -35,12 +35,6 @@
             $stmt = $_conexion -> prepare($sql);
             $stmt -> execute([
                 "ciudad" => $_GET["ciudad"]
-            ]);
-        } else if ($_GET["anno_estreno"]) {
-            $sql = "SELECT * FROM estudios WHERE anno_estreno = :anno_estreno";
-            $stmt = $_conexion -> prepare($sql);
-            $stmt -> execute([
-                "anno_estreno" => $_GET["anno_estreno"]
             ]);
         } else {
             $sql = "SELECT * FROM estudios";
