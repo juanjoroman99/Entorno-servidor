@@ -37,7 +37,7 @@
                 "titulo" => $_GET["titulo"]
             ]);
         } else if (isset($_GET["anno_estreno"])){
-            $sql = "SELECT * FROM animes WHERE anno_estreno"
+            $sql = "SELECT * FROM animes WHERE anno_estreno";
         }
         $resultado = $stmt -> fetchAll(PDO::FETCH_ASSOC);   # Equivalente al getResult de mysqli
         echo json_encode($resultado);
